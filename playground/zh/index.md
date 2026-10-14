@@ -22,4 +22,4 @@ import Button from '../Button.vue'
 :::
 ```
 
-`vitepress-plugin-component`会尽可能的适配vitepress主题，你可以在导航栏中切换主题，然后再观察tabs中的变化。
+`vitepress-plugin-sfc`会尽可能的适配vitepress主题，你可以在导航栏中切换主题，然后再观察tabs中的变化。

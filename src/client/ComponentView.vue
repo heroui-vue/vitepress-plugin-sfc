@@ -99,7 +99,8 @@ async function copyCode() {
         </header>
 
         <main v-show="activedTab === 'preview'">
-            <slot />
+            <!-- <slot /> -->
+            <slot name="v3" />
         </main>
 
         <div

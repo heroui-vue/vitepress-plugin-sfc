@@ -16,7 +16,7 @@ A VitePress plugin to display Vue components in your documentation with an autom
 ## Installation
 
 ```bash
-npm install vitepress-plugin-component --save-dev
+npm install vitepress-plugin-sfc --save-dev
 ```
 
 ## Configuration
@@ -27,7 +27,7 @@ Add the plugin to your VitePress configuration file (`.vitepress/config.js` or `
 
 ```ts
 import { defineConfig } from 'vitepress'
-import { componentViewMarkdownPlugin } from 'vitepress-plugin-component'
+import { componentViewMarkdownPlugin } from 'vitepress-plugin-sfc'
 
 export default defineConfig({
   // ... other configurations
@@ -47,7 +47,7 @@ VitePress resolves themes from `.vitepress/theme/index.js` or `.vitepress/theme/
 ```ts
 // theme/index.ts
 import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from 'vitepress-plugin-component/client'
+import { enhanceAppWithComponentView } from 'vitepress-plugin-sfc/client'
 
 export default {
   extends: DefaultTheme, // Use VitePress's default theme
@@ -145,7 +145,7 @@ import Button from './Button.vue'
 
 You can view the component's preview and source code in the tabs above.
 
-You can check out the [live demo here](https://vitepress-plugin-component-playgrou.vercel.app/).
+You can check out the [live demo here](https://vitepress-plugin-sfc-playgrou.vercel.app/).
 
 ## Notes
 

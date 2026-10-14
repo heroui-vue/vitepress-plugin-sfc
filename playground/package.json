@@ -6,8 +6,11 @@
     "build": "pnpm -w build && vitepress build"
   },
   "devDependencies": {
-    "vitepress": "latest",
-    "vue": "^3.5.0",
-    "vitepress-plugin-component": "workspace:*"
+    "vitepress": "next",
+    "vitepress-plugin-sfc": "workspace:*",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "markdown-it": "^14.3.2"
   }
 }

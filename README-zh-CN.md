@@ -16,7 +16,7 @@
 ## 安装
 
 ```bash
-npm install vitepress-plugin-component --save-dev
+npm install vitepress-plugin-sfc --save-dev
 ```
 
 ## 配置
@@ -27,7 +27,7 @@ npm install vitepress-plugin-component --save-dev
 
 ```ts
 import { defineConfig } from 'vitepress'
-import { componentViewMarkdownPlugin } from 'vitepress-plugin-component'
+import { componentViewMarkdownPlugin } from 'vitepress-plugin-sfc'
 
 export default defineConfig({
   // ... 其他配置
@@ -47,7 +47,7 @@ vitepress从`.vitepress/theme/index.js` 或 `.vitepress/theme/index.ts`中解析
 ```ts
 // theme/index.ts
 import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from 'vitepress-plugin-component/client'
+import { enhanceAppWithComponentView } from 'vitepress-plugin-sfc/client'
 
 export default {
   extends: DefaultTheme, // 使用vitepress的默认主题
@@ -143,7 +143,7 @@ import Button from './Button.vue'
 ##
 ```
 
-你可以前往此处的[查看效果](https://vitepress-plugin-component-playgrou.vercel.app/)。
+你可以前往此处的[查看效果](https://vitepress-plugin-sfc-playgrou.vercel.app/)。
 ## 许可证
 
 [MIT](LICENSE)
