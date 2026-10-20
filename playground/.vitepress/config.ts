@@ -1,5 +1,4 @@
 import { defineConfig } from "vitepress";
-import MarkdownIt from "markdown-it";
 import { sfcPlugin, sfcRegistryVitePlugin } from "vitepress-plugin-sfc";
 
 // https://vitepress.dev/reference/site-config
@@ -40,6 +39,6 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [sfcRegistryVitePlugin({ md: new MarkdownIt() })]
-  }
+    plugins: [sfcRegistryVitePlugin()],
+  },
 });

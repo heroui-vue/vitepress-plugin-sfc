@@ -26,18 +26,18 @@ npm install vitepress-plugin-sfc --save-dev
 Add the plugin to your VitePress configuration file (`.vitepress/config.js` or `.vitepress/config.ts`):
 
 ```ts
-import { defineConfig } from 'vitepress'
-import { componentViewMarkdownPlugin } from 'vitepress-plugin-sfc'
+import { defineConfig } from "vitepress";
+import { componentViewMarkdownPlugin } from "vitepress-plugin-sfc";
 
 export default defineConfig({
   // ... other configurations
 
   markdown: {
     config: (md) => {
-      md.use(componentViewMarkdownPlugin)
-    }
+      md.use(componentViewMarkdownPlugin);
+    },
   },
-})
+});
 ```
 
 ### Configure Client
@@ -47,14 +47,14 @@ VitePress resolves themes from `.vitepress/theme/index.js` or `.vitepress/theme/
 ```ts
 // theme/index.ts
 import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from 'vitepress-plugin-sfc/client'
+import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
 
 export default {
   extends: DefaultTheme, // Use VitePress's default theme
   enhanceApp({ app }) {
-    enhanceAppWithComponentView(app)
-  }
-}
+    enhanceAppWithComponentView(app);
+  },
+};
 ```
 
 The `enhanceAppWithComponentView` function automatically registers the preview component on the passed root component.
@@ -88,15 +88,13 @@ This is an example of button SFC:
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 
-const count = ref(0)
+const count = ref(0);
 </script>
 
 <template>
-  <button class="my-button" @click="count++">
-    Clicked {{ count }} times
-  </button>
+  <button class="my-button" @click="count++">Clicked {{ count }} times</button>
 </template>
 
 <style>
@@ -151,6 +149,7 @@ You can check out the [live demo here](https://vitepress-plugin-sfc-playgrou.ver
 
 - Component paths should be relative to the project root.
 - Current version supports simple Vue components; complex components might require additional configuration. - Components must be valid Single File Components (SFCs).
+
 ## License
 
 [MIT](LICENSE)

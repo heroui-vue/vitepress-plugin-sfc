@@ -1,8 +1,8 @@
-# Vitepress Plugin Component
+# Vitepress Plugin SFC
 
 [English](README.md)
 
-一个 VitePress 插件，用于生成一个双标签页组件：一个用于组件预览，另一个用于显示其源代码。
+一个 Vitepress 插件，支持在 Markdown 中写 Vue SFC，然后渲染到 Vitepress
 
 ## 功能
 
@@ -26,18 +26,18 @@ npm install vitepress-plugin-sfc --save-dev
 将插件添加到VitePress的配置文件中（`.vitepress/config.js` 或 `.vitepress/config.ts`）：
 
 ```ts
-import { defineConfig } from 'vitepress'
-import { componentViewMarkdownPlugin } from 'vitepress-plugin-sfc'
+import { defineConfig } from "vitepress";
+import { componentViewMarkdownPlugin } from "vitepress-plugin-sfc";
 
 export default defineConfig({
   // ... 其他配置
 
   markdown: {
     config: (md) => {
-      md.use(componentViewMarkdownPlugin)
-    }
+      md.use(componentViewMarkdownPlugin);
+    },
   },
-})
+});
 ```
 
 ### 配置客户端
@@ -47,14 +47,14 @@ vitepress从`.vitepress/theme/index.js` 或 `.vitepress/theme/index.ts`中解析
 ```ts
 // theme/index.ts
 import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from 'vitepress-plugin-sfc/client'
+import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
 
 export default {
   extends: DefaultTheme, // 使用vitepress的默认主题
   enhanceApp({ app }) {
-    enhanceAppWithComponentView(app)
-  }
-}
+    enhanceAppWithComponentView(app);
+  },
+};
 ```
 
 `enhanceAppWithComponentView`函数内部会在传递的根组件上自动注册预览组件。
@@ -88,15 +88,13 @@ export default {
 
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 
-const count = ref(0)
+const count = ref(0);
 </script>
 
 <template>
-  <button class="my-button" @click="count++">
-    点击了 {{ count }} 次
-  </button>
+  <button class="my-button" @click="count++">点击了 {{ count }} 次</button>
 </template>
 
 <style>
@@ -144,6 +142,7 @@ import Button from './Button.vue'
 ```
 
 你可以前往此处的[查看效果](https://vitepress-plugin-sfc-playgrou.vercel.app/)。
+
 ## 许可证
 
 [MIT](LICENSE)
