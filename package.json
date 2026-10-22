@@ -1,7 +1,10 @@
 {
   "name": "vitepress-plugin-sfc",
   "version": "2.0.0-beta.2",
-  "description": "VitePress plugin that renders inline Vue SFC with tabs showing preview and source code",
+  "bugs": {
+    "url": "https://github.com/heroui-vue/vitepress-plugin-sfc/issues"
+  },
+  "description": "Allows you to write Vue SFC within Markdown files and render them in VitePress.",
   "keywords": [
     "component",
     "plugin",
