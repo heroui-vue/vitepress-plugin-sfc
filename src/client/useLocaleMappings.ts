@@ -1,14 +1,9 @@
 import { provide, inject, getCurrentInstance } from "vue";
 import type { App } from "vue";
 
-export type LocaleMappings = Record<
-  string,
-  { previewLabel: string; codeLabel: string }
->;
+export type LocaleMappings = Record<string, { previewLabel: string; codeLabel: string }>;
 
-const localeMappingSymbol = Symbol(
-  "__vitepress_plugin_component_localeMapping",
-);
+const localeMappingSymbol = Symbol("__vitepress_plugin_component_localeMapping");
 
 /**
  * Initialize locale mappings for the application.

@@ -6,7 +6,8 @@
       "@/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "composite": true
+    "composite": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*.js", "src/**/*.ts", "src/**/*.vue"],
   "exclude": ["node_modules", "dist"]
