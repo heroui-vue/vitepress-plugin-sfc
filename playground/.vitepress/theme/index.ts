@@ -1,7 +1,8 @@
 import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from "vitepress-plugin-component/client";
+import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
+import type { Theme } from "vitepress";
 
-export default {
+const theme: Theme = {
   extends: DefaultTheme,
   enhanceApp({ app }) {
     enhanceAppWithComponentView(app, {
@@ -9,3 +10,5 @@ export default {
     });
   },
 };
+
+export default theme;

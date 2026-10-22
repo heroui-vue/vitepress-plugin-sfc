@@ -26,4 +26,4 @@ import Button from '../Button.vue'
 :::
 ```
 
-`vitepress-plugin-component` s'efforce de s'adapter aux thèmes VitePress aussi fidèlement que possible. Vous pouvez changer de thème via la barre de navigation, puis observer les changements au sein des onglets.
+`vitepress-plugin-sfc` s'efforce de s'adapter aux thèmes VitePress aussi fidèlement que possible. Vous pouvez changer de thème via la barre de navigation, puis observer les changements au sein des onglets.

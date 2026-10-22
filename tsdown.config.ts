@@ -4,7 +4,7 @@ import vue from "unplugin-vue/rolldown";
 export default defineConfig({
   format: "esm",
   entry: {
-    index: "src/node/markdown.ts",
+    index: "src/node/index.ts",
   },
   plugins: [vue()],
   alias: {

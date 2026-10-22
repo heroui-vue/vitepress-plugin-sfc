@@ -1,13 +1,33 @@
 {
-  "name": "vitepress-plugin-component",
-  "version": "1.2.0",
+  "name": "vitepress-plugin-sfc",
+  "version": "2.0.0-beta.2",
   "bugs": {
-    "url": "https://github.com/heroui-vue/vitepress-plugin-component/issues"
+    "url": "https://github.com/heroui-vue/vitepress-plugin-sfc/issues"
   },
-  "description": "VitePress plugin that renders Vue components with tabs showing preview and source code",
+  "description": "Allows you to write Vue SFC within Markdown files and render them in VitePress.",
+  "keywords": [
+    "component",
+    "plugin",
+    "tabs",
+    "vitepress",
+    "vitepress plugin",
+    "vitepress-plugin",
+    "vue"
+  ],
+  "license": "MIT",
+  "author": "hotdogc1017@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroui-vue/vitepress-plugin-sfc"
+  },
+  "files": [
+    "dist",
+    "src/client"
+  ],
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
@@ -15,47 +35,34 @@
     },
     "./client": "./src/client/index.ts"
   },
-  "files": [
-    "dist",
-    "src/client"
-  ],
-  "types": "./dist/index.d.mts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "dev": "tsdown -w",
     "build": "tsdown --minify",
     "bump": "bumpp --sign",
     "pub": "npm run build && npm publish --registry=https://registry.npmjs.org/",
-    "dev:docs": "pnpm -C playground dev"
-  },
-  "keywords": [
-    "vitepress",
-    "plugin",
-    "vue",
-    "component",
-    "tabs"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "author": "hotdogc1017@gmail.com",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/heroui-vue/vitepress-plugin-component"
+    "dev:docs": "pnpm -C playground dev",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "t": "vitest run tests/output.test.ts"
   },
   "devDependencies": {
-    "@babel/parser": "8.0.0-rc.5",
-    "@babel/traverse": "8.0.0-rc.5",
-    "@types/markdown-it": "^14.1.2",
+    "@types/markdown-it": "^14.2.0",
     "@types/markdown-it-container": "^2.0.10",
     "@types/node": "^22.17.0",
     "bumpp": "^10.1.0",
     "markdown-it-container": "^4.0.0",
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.88.0",
     "tsdown": "0.21.10",
     "typescript": "^5.8.3",
     "unplugin-vue": "^6.2.0",
-    "vitepress": "latest",
+    "vitepress": "next",
+    "vitest": "^5.0.4",
     "vue": "^3.5.0"
   }
 }

@@ -3,11 +3,15 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress",
+    "build:on": "vitepress build",
     "build": "pnpm -w build && vitepress build"
   },
+  "dependencies": {
+    "markdown-it": "^14.3.2"
+  },
   "devDependencies": {
-    "vitepress": "latest",
-    "vue": "^3.5.0",
-    "vitepress-plugin-component": "workspace:*"
+    "vitepress": "next",
+    "vitepress-plugin-sfc": "workspace:*",
+    "vue": "^3.5.0"
   }
 }
