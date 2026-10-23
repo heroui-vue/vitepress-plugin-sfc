@@ -1,9 +1,6 @@
 {
   "name": "vitepress-plugin-sfc",
   "version": "2.0.0-beta.2",
-  "bugs": {
-    "url": "https://github.com/heroui-vue/vitepress-plugin-sfc/issues"
-  },
   "description": "Allows you to write Vue SFC within Markdown files and render them in VitePress.",
   "keywords": [
     "component",
@@ -14,6 +11,9 @@
     "vitepress-plugin",
     "vue"
   ],
+  "bugs": {
+    "url": "https://github.com/heroui-vue/vitepress-plugin-sfc/issues"
+  },
   "license": "MIT",
   "author": "hotdogc1017@gmail.com",
   "repository": {
@@ -48,7 +48,7 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",
-    "t": "vitest run tests/output.test.ts"
+    "test": "vitest run -r __tests__"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.2.0",
