@@ -83,7 +83,7 @@ export default {
 ```
 :::
 
-然后添加参数`showSource`或者`showSource=true`，这将渲染为以下效果：
+然后添加参数`showSource`，这将渲染为以下效果：
 
 :::sfc showSource
 <script setup>
@@ -96,8 +96,6 @@ const msg = ref("");
 </template>
 :::
 
-## 功能
-
-### `showSource`
-
-building...
+::: tip
+`showSource=true`也会生效，除了这两种方式外，其它形式会被认为无效。
+:::
