@@ -25,9 +25,8 @@
     "src/client"
   ],
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "./dist/index.d.mts",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
