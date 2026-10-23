@@ -16,7 +16,7 @@ const openFlag = `container_${CONTAINER_NAME}_open`;
 export const SCRIPT_RE = /<script\b[^>]*>([\s\S]*?)<\/script>/;
 export const SFC_IMPORTER_RE = /^virtual:VP_SFC_/;
 
-function createDefaultSfcBlock(): SfcBlock {
+export function createDefaultSfcBlock(): SfcBlock {
   return {
     content: "<script setup>\n</script>",
     tagOpen: "<script setup>",
@@ -26,11 +26,26 @@ function createDefaultSfcBlock(): SfcBlock {
   };
 }
 
+export function createVirtualImport(
+  content: string,
+): Pick<SFC, "hash" | "name" | "importer" | "renderedContent"> {
+  const hash = toHash(content);
+  const name = `VP_SFC_${hash}`;
+  const importer = `virtual:${name}.vue`;
+  const renderedContent =
+    `// [vitepress-plugin-sfc] injected vue virtual imports` +
+    `\n// REGION START\n` +
+    `import ${name} from '${importer}'` +
+    "\n// REGION END\n";
+  return { hash, name, importer, renderedContent };
+}
+
 export interface SFC {
   name: string;
-  content: string;
   hash: string;
   importer: string;
+  content: string;
+  renderedContent: string;
   markupParams: MarkupParams;
 }
 
@@ -87,20 +102,14 @@ function plugin(md: MarkdownRenderer) {
       const token = tokens[idx];
 
       if (token.nesting === 1) {
-        const { hash, name, content, markupParams, importer } = token.meta.sfc as SFC;
+        const { hash, name, content, renderedContent, markupParams } = token.meta.sfc as SFC;
         const hasHash = __matched_sfc_set__.has(hash);
 
         if (!hasHash) {
           const { tagOpen, tagClose, contentStripped } = validSfcBlock;
-          const appendContentStripped =
-            contentStripped +
-            `// [vitepress-plugin-sfc] injected vue virtual imports` +
-            `\n// REGION START\n` +
-            `import ${name} from '${importer}'` +
-            "\n// REGION END\n";
+          const appendContentStripped = contentStripped + renderedContent;
           validSfcBlock.contentStripped = appendContentStripped;
           validSfcBlock.content = tagOpen + appendContentStripped + tagClose;
-
           __matched_sfc_set__.add(hash);
         }
 
@@ -129,15 +138,9 @@ function plugin(md: MarkdownRenderer) {
 
       const [s, e] = map;
       const content = sourceLines.slice(s + 1, e).join("\n");
-      const hash = toHash(content);
-      const name = `VP_SFC_${hash}`;
-      const importer = `virtual:${name}.vue`;
-      if (!SFC_IMPORTER_RE.test(importer)) {
-        throw new Error(`[vitepress-plugin-sfc] Plugin-self Error: Unmatched importer syntax`);
-      }
-
+      const virtualImport = createVirtualImport(content);
       const [, params] = (info ?? "").split(" ");
-      const sfc = { content, name, hash, importer, markupParams: parseMarkupParams(params) };
+      const sfc = { ...virtualImport, content, markupParams: parseMarkupParams(params) };
       return sfc;
     }
 
