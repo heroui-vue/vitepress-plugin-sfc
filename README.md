@@ -1,13 +1,13 @@
 # VitePress Plugin SFC
 
-[Documentation](https://vitepress-plugin-sfc-playgrou.vercel.app/)
+[Documentation](https://vitepress-plugin-sfc-playgrou.vercel.app/) | [中文](README-zh-CN.md)
 
 Allows you to write Vue SFC within Markdown files and render them in VitePress.
 
 ## Install
 
 ```shell
-npm install -D vitepress-plugin-sfc
+npm install -D vitepress-plugin-sfc@latest
 ```
 
 ## Configuration

@@ -7,7 +7,7 @@
 ## 安装
 
 ```shell
-npm install -D vitepress-plugin-sfc
+npm install -D vitepress-plugin-sfc@latest
 ```
 
 ## 配置
