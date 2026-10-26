@@ -12,7 +12,9 @@ npm install -D vitepress-plugin-sfc@latest
 
 ## 配置
 
-在`.vitepress/config.ts`中配置：
+在`.vitepress/config.ts`和`.vitepress/theme/index.ts`中配置：
+
+`.vitepress/config.ts`
 
 ```ts
 import { defineConfig } from "vitepress";
@@ -29,6 +31,20 @@ export default defineConfig({
     plugins: [sfcRegistryVitePlugin()],
   },
 });
+```
+
+`.vitepress/theme/index.ts`
+
+```ts
+import DefaultTheme from "vitepress/theme";
+import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
+
+export default {
+  extends: DefaultTheme,
+  enhanceApp({ app }) {
+    enhanceAppWithComponentView(app);
+  },
+};
 ```
 
 ## 使用

@@ -12,14 +12,16 @@ npm install -D vitepress-plugin-sfc@latest
 
 ## Configuration
 
-Configure it in `.vitepress/config.ts`:
+Configure it in `.vitepress/config.ts` and `.vitepress/theme/index.ts`:
+
+`.vitepress/config.ts`
 
 ```ts
 import { defineConfig } from "vitepress";
 import { sfcPlugin, sfcRegistryVitePlugin } from "vitepress-plugin-sfc";
 
 export default defineConfig({
-  // ...other configurations
+  // ...其他配置
   markdown: {
     config: (md) => {
       md.use(sfcPlugin);
@@ -29,6 +31,20 @@ export default defineConfig({
     plugins: [sfcRegistryVitePlugin()],
   },
 });
+```
+
+`.vitepress/theme/index.ts`
+
+```ts
+import DefaultTheme from "vitepress/theme";
+import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
+
+export default {
+  extends: DefaultTheme,
+  enhanceApp({ app }) {
+    enhanceAppWithComponentView(app);
+  },
+};
 ```
 
 ## Usage
