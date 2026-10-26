@@ -21,7 +21,6 @@ import { defineConfig } from "vitepress";
 import { sfcPlugin, sfcRegistryVitePlugin } from "vitepress-plugin-sfc";
 
 export default defineConfig({
-  // ...其他配置
   markdown: {
     config: (md) => {
       md.use(sfcPlugin);
