@@ -5,9 +5,7 @@ import type { Theme } from "vitepress";
 const theme: Theme = {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    enhanceAppWithComponentView(app, {
-      localeMappings: {},
-    });
+    enhanceAppWithComponentView(app);
   },
 };
 

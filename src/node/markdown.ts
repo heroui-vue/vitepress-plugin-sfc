@@ -1,8 +1,8 @@
 import crypto from "node:crypto";
 import markdownItContainer from "markdown-it-container";
 
+import { type ComponentViewProps } from "../client/index";
 import type Token from "markdown-it/lib/token.mjs";
-import { type PluginSimple } from "markdown-it";
 import {
   type MarkdownEnv,
   type MarkdownRenderer,
@@ -46,7 +46,7 @@ export interface SFC {
   importer: string;
   content: string;
   renderedContent: string;
-  markupParams: MarkupParams;
+  markupParams: ComponentViewProps;
 }
 
 export interface MarkdownEnvExt extends MarkdownEnv {
@@ -54,34 +54,30 @@ export interface MarkdownEnvExt extends MarkdownEnv {
   __matched_sfc_set__: Set<string>;
 }
 
-export interface MarkupParams {
-  showSource: boolean;
-  filepath?: string;
-  component?: string;
-}
-
 function toHash(content: string) {
   return crypto.createHash("sha256").update(content).digest("hex");
 }
 
-function parseMarkupParams(params: string): MarkupParams {
+function parseMarkupParams(params: string): ComponentViewProps {
   if (!params) {
-    return {} as MarkupParams;
+    return {} as ComponentViewProps;
   }
 
   const arr = params.split(",");
   return Object.fromEntries(
-    arr.map((item) => {
-      const [, key, value] = (item.match(/([^=]+)=(.*)/) || []) as [
-        any,
-        keyof MarkupParams,
-        string,
-      ];
-      if (item === "showSource" || (key === "showSource" && value === "true")) {
-        return ["showSource", true];
-      }
-      return [key, value];
-    }),
+    arr
+      .map((item) => {
+        const [, key, value] = (item.match(/([^=]+)=?(.*)/) || []) as [
+          any,
+          keyof ComponentViewProps,
+          string,
+        ];
+        if (key === "disableRender") {
+          return ["disableRender", !value || value === "true" ? "true" : "false"];
+        }
+        return key && value ? [key, value] : undefined;
+      })
+      .filter(Boolean),
   );
 }
 
@@ -113,12 +109,13 @@ function plugin(md: MarkdownRenderer) {
           __matched_sfc_set__.add(hash);
         }
 
-        return markupParams.showSource
-          ? `<ComponentView>\n` +
-              `<template #v3><${name} /></template>\n` +
-              `<template #highlight>${options.highlight(content, "vue", "")}</template>\n` +
-              `</ComponentView>\n`
-          : `<${name} />`;
+        const { render = "", disableRender } = markupParams;
+        return (
+          `<ComponentView render="${render}" :disableRender="${disableRender}">\n` +
+          `<${name} />\n` +
+          `<template #highlight>${options.highlight(content, "vue", "")}</template>\n` +
+          `</ComponentView>\n`
+        );
       } else {
         return ``;
       }
@@ -179,4 +176,4 @@ function plugin(md: MarkdownRenderer) {
   });
 }
 
-export const sfcPlugin = plugin as PluginSimple;
+export const sfcPlugin = plugin;

@@ -1,0 +1,126 @@
+<script setup lang="ts">
+import { computed, ref, useId, onMounted } from "vue";
+import { useData } from "vitepress";
+import { type GroupTabsProps } from "./index";
+
+const DEFAULT_LOCALE: GroupTabsProps["locale"] = {
+  en: {
+    label: {
+      preview: "Preview",
+      code: "Source Code",
+    },
+  },
+  zh: {
+    label: {
+      preview: "预览",
+      code: "源代码",
+    },
+  },
+};
+
+const props = defineProps<GroupTabsProps>();
+
+const { lang } = useData();
+
+const currentLocale = computed(() => {
+  const locale = props.locale;
+  return locale?.[lang.value] || DEFAULT_LOCALE[lang.value];
+});
+
+const activedTab = ref<"preview" | "code">("preview");
+const tabGroupId = useId();
+</script>
+
+<template>
+  <div class="vp-component-tabs">
+    <header>
+      <template v-for="(value, key) in currentLocale.label" :key="key">
+        <input
+          :id="`tab-${tabGroupId}-${key}`"
+          type="radio"
+          :name="`vp-component-tabs-${tabGroupId}`"
+          style="position: fixed; opacity: 0; pointer-events: none"
+          :data-checked="activedTab === key" />
+        <label :for="`tab-${tabGroupId}-${key}`" @click="activedTab = key">{{ value }}</label>
+      </template>
+    </header>
+
+    <main v-show="activedTab === 'preview'">
+      <slot />
+    </main>
+
+    <div
+      v-show="activedTab === 'code'"
+      :class="`language-vue${activedTab === 'code' ? ' active' : ''}`"
+      style="margin: 0px">
+      <button title="copy source code" class="copy"></button>
+      <span class="lang">Vue</span>
+      <slot name="highlight" />
+    </div>
+  </div>
+</template>
+
+<style>
+.vp-component-tabs {
+  margin: 16px 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content 1fr;
+  row-gap: 16px;
+}
+
+.vp-component-tabs > header {
+  display: flex;
+  position: relative;
+  border-radius: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.vp-component-tabs > header input + label {
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vp-code-tab-text-color);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.25s,
+    background-color 0.25s;
+}
+
+.vp-component-tabs > header input + label::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  border-radius: 2px;
+  left: 8px;
+  right: 8px;
+  bottom: -1px;
+  transition: background-color 0.25s;
+}
+.vp-component-tabs > header input[data-checked="true"] + label::after {
+  background-color: var(--vp-code-tab-active-bar-color);
+}
+.vp-component-tabs > header input[data-checked="true"] + label,
+.vp-component-tabs > header label:hover {
+  color: var(--vp-code-tab-active-text-color);
+}
+
+.vp-component-tabs > main {
+  padding: 20px;
+  background-color: var(--vp-nav-bg-color);
+  border-radius: 8px;
+  outline: 1px solid var(--vp-c-divider);
+}
+
+.vp-component-tabs > section {
+  background-color: var(--vp-code-block-bg);
+  border-radius: 8px;
+  padding: 24px;
+  overflow: auto;
+}
+</style>
