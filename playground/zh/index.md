@@ -75,15 +75,13 @@ import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
-    enhanceAppWithComponentView(app, {
-      localeMappings: {},
-    });
+    enhanceAppWithComponentView(app);
   },
 };
 ```
 :::
 
-然后添加参数`showSource`，这将渲染为以下效果：
+然后添加参数`showSource`到`:::sfc`，就像这样：`:::sfc showSource`，这将渲染为以下效果：
 
 :::sfc showSource
 <script setup>
