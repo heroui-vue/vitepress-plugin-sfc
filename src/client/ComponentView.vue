@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, computed, getCurrentInstance, withDefaults, type Component } from "vue";
+import { inject, computed, getCurrentInstance, type Component } from "vue";
 import { configSymbol, type Config, type ComponentViewProps } from "./index";
 
 interface Props extends Omit<ComponentViewProps, "render"> {
@@ -10,17 +10,18 @@ const props = withDefaults(defineProps<ComponentViewProps>(), {
   disableRender: false,
 });
 
+const injectedConfig = inject<Config>(configSymbol);
+const instance = getCurrentInstance()!;
+
 const config = computed<Props>(() => {
-  const { render, disableRender } = inject<Config>(configSymbol);
+  const { render, disableRender } = injectedConfig;
   const resolveConfig = {
     render: render || props.render,
     disableRender:
       disableRender === null || disableRender === undefined ? props.disableRender : disableRender,
   };
 
-  const renderInstance = getCurrentInstance().appContext.app.component(
-    resolveConfig.render as string,
-  );
+  const renderInstance = instance.appContext.app.component(resolveConfig.render as string);
   if (!renderInstance) {
     console.warn(`[vitepress-plugin-sfc] Unregistered component: ${resolveConfig.render}`);
   }
