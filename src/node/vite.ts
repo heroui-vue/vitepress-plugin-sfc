@@ -1,7 +1,7 @@
 import { sfcPlugin, SFC_IMPORTER_RE, type SFC, type MarkdownEnvExt } from "./markdown";
 import { createMarkdownRenderer, type Plugin } from "vitepress";
 
-export async function sfcRegistryVitePlugin(): Promise<Plugin> {
+export async function sfcVitePlugin(): Promise<Plugin> {
   const md = await createMarkdownRenderer("", { html: true });
   md.use(sfcPlugin);
   const sfcMap = new Map();
