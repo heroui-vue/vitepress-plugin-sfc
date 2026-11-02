@@ -47,7 +47,7 @@
     "build:check": "tsdown",
     "bump": "bumpp --sign",
     "pub": "npm run build && npm publish --registry=https://registry.npmjs.org/",
-    "dev:docs": "pnpm -C playground dev",
+    "dev:docs": "pnpm build:check && pnpm -C playground dev",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",

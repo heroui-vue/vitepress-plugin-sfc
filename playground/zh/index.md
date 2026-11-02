@@ -1,11 +1,15 @@
+<script setup>
+const version = VITEPRESS_PLUGIN_SFC_VERSION
+</script>
+
 # 快速开始
 
 `vitepress-plugin-sfc`能让你在Markdown文件中书写Vue SFC并在Vitepress上渲染出来。
 
 ## 安装
 
-```shell
-npm install -D vitepress-plugin-sfc
+```shell-vue
+npm install -D vitepress-plugin-sfc@{{ version }}
 ```
 
 ## 配置

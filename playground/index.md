@@ -1,9 +1,15 @@
+<script setup>
+const version = VITEPRESS_PLUGIN_SFC_VERSION
+</script>
+
 # Quick Start
 
-`vitepress-plugin-sfc` allows you to write Vue SFCs (Single-File Components) within Markdown files and render them in VitePress. ## Installation
+`vitepress-plugin-sfc` allows you to write Vue SFCs (Single-File Components) within Markdown files and render them in VitePress.
 
-```shell
-npm install -D vitepress-plugin-sfc
+## Installation
+
+```shell-vue
+npm install -D vitepress-plugin-sfc@{{ version }}
 ```
 
 ## Configuration

@@ -1,5 +1,5 @@
 import { defineConfig } from "vitepress";
-import { sfcPlugin, sfcRegistryVitePlugin } from "vitepress-plugin-sfc";
+import { sfcPlugin, sfcVitePlugin, version } from "vitepress-plugin-sfc";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -39,6 +39,9 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [sfcRegistryVitePlugin()],
+    plugins: [sfcVitePlugin()],
+    define: {
+      VITEPRESS_PLUGIN_SFC_VERSION: JSON.stringify(version),
+    },
   },
 });

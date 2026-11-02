@@ -3,8 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress",
-    "build:on": "vitepress build",
-    "build": "pnpm -w build && vitepress build"
+    "build": "vitepress build"
   },
   "dependencies": {
     "markdown-it": "^14.3.2"
