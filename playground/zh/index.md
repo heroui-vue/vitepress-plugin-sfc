@@ -19,7 +19,7 @@ npm install -D vitepress-plugin-sfc@{{ version }}
 ::: code-group
 ```ts [.vitepress/config.ts]
 import { defineConfig } from "vitepress";
-import { sfcPlugin, sfcRegistryVitePlugin } from "vitepress-plugin-sfc";
+import { sfcPlugin, sfcVitePlugin } from "vitepress-plugin-sfc";
 
 export default defineConfig({
   // ...其他配置
@@ -29,7 +29,7 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [sfcRegistryVitePlugin()],
+    plugins: [sfcVitePlugin()],
   },
 });
 ```

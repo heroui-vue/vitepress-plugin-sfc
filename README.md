@@ -18,7 +18,7 @@ Configure it in `.vitepress/config.ts` and `.vitepress/theme/index.ts`:
 
 ```ts
 import { defineConfig } from "vitepress";
-import { sfcPlugin, sfcRegistryVitePlugin } from "vitepress-plugin-sfc";
+import { sfcPlugin, sfcVitePlugin } from "vitepress-plugin-sfc";
 
 export default defineConfig({
   markdown: {
@@ -27,7 +27,7 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [sfcRegistryVitePlugin()],
+    plugins: [sfcVitePlugin()],
   },
 });
 ```
