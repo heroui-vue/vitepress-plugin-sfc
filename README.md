@@ -7,7 +7,7 @@ Allows you to write Vue SFC within Markdown files and render them in VitePress.
 ## Install
 
 ```shell
-npm install -D vitepress-plugin-sfc@latest
+npm install -D vitepress-plugin-sfc@2.0.0-beta.5
 ```
 
 ## Configuration
