@@ -3,12 +3,16 @@ import vue from "unplugin-vue/rolldown";
 
 export default defineConfig({
   format: "esm",
+  platform: "node",
   entry: {
     index: "src/node/index.ts",
+    client: "src/client/index.ts",
   },
   plugins: [vue()],
   alias: {
     "@": "src/",
   },
-  external: ["vue", "vitepress"],
+  deps: {
+    neverBundle: ["vue", "vitepress"],
+  },
 });

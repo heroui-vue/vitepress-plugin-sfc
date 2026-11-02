@@ -21,18 +21,21 @@
     "url": "https://github.com/heroui-vue/vitepress-plugin-sfc"
   },
   "files": [
-    "dist",
-    "src/client"
+    "dist"
   ],
   "type": "module",
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
       "default": "./dist/index.mjs"
     },
-    "./client": "./src/client/index.ts"
+    "./client": {
+      "types": "./dist/client.d.mts",
+      "default": "./dist/client.mjs"
+    },
+    "./style": "./dist/style.css"
   },
   "publishConfig": {
     "access": "public",
@@ -41,6 +44,7 @@
   "scripts": {
     "dev": "tsdown -w",
     "build": "tsdown --minify",
+    "build:check": "tsdown",
     "bump": "bumpp --sign",
     "pub": "npm run build && npm publish --registry=https://registry.npmjs.org/",
     "dev:docs": "pnpm -C playground dev",

@@ -38,11 +38,12 @@ export default defineConfig({
 ```ts
 import DefaultTheme from "vitepress/theme";
 import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
+import "vitepress-plugin-sfc/style";
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ app }) {
-    enhanceAppWithComponentView(app);
+  async enhanceApp({ app }) {
+    await enhanceAppWithComponentView(app);
   },
 };
 ```
