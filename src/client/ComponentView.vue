@@ -1,29 +1,40 @@
 <script setup lang="ts">
-import { inject, computed, getCurrentInstance, type Component } from "vue";
+import { inject, computed, createCommentVNode, type Component } from "vue";
 import { configSymbol, type Config, type ComponentViewProps } from "./index";
+import GroupTabs from "./GroupTabs.vue";
 
-interface Props extends Omit<ComponentViewProps, "render"> {
-  render: Component | undefined;
+interface Props extends ComponentViewProps {
+  name?: string;
 }
 
-const props = withDefaults(defineProps<ComponentViewProps>(), {
+const props = withDefaults(defineProps<Props>(), {
   disableRender: false,
 });
 
 const injectedConfig = inject<Config>(configSymbol);
-const instance = getCurrentInstance()!;
+
+const VitePressPluginSFCComment = computed(() =>
+  createCommentVNode(`[vitepress-plugin-sfc] @name ${props.name}`),
+);
 
 const config = computed<Props>(() => {
-  const { render, disableRender } = injectedConfig;
+  const { render, disableRender, nativeIfNotRender } = injectedConfig;
   const resolveConfig = {
     render: render || props.render,
     disableRender:
       disableRender === null || disableRender === undefined ? props.disableRender : disableRender,
   };
 
-  const renderInstance = instance.appContext.app.component(resolveConfig.render as string);
-  if (!renderInstance) {
-    console.warn(`[vitepress-plugin-sfc] Unregistered component: ${resolveConfig.render}`);
+  let renderInstance: Component | boolean | undefined;
+  if (resolveConfig.render === "GroupTabs") {
+    renderInstance = GroupTabs;
+  } else if (nativeIfNotRender && !resolveConfig.render) {
+    renderInstance = true;
+  } else if (!resolveConfig.render) {
+    console.error(
+      `[vitepress-plugin-sfc] Unregistered component: ${resolveConfig.render}.
+      You can render content as-is by enabling the "nativeIfNotRender" parameter.`,
+    );
   }
   return {
     ...resolveConfig,
@@ -33,15 +44,14 @@ const config = computed<Props>(() => {
 </script>
 
 <template>
-  <div>
-    <slot v-if="!config.render || config.disableRender"></slot>
-    <component v-else :is="config.render">
-      <slot />
-      <template #highlight>
-        <slot name="highlight"></slot>
-      </template>
-    </component>
-  </div>
+  <component :is="VitePressPluginSFCComment"></component>
+  <slot v-if="!config.render || config.disableRender"></slot>
+  <component v-else :is="config.render">
+    <slot />
+    <template #highlight>
+      <slot name="highlight"></slot>
+    </template>
+  </component>
 </template>
 
 <style></style>

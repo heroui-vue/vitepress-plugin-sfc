@@ -1,9 +1,11 @@
 import ComponentView from "./ComponentView.vue";
+import type { Component } from "vue";
 import type { EnhanceAppContext } from "vitepress";
 
 export interface ComponentViewProps {
-  render?: "GroupTabs" | "SourceCodeButton" | (string & {});
+  render?: "GroupTabs" | "SourceCodeButton" | (string & {}) | Component | boolean;
   disableRender?: boolean;
+  nativeIfNotRender?: boolean;
 }
 
 export interface GroupTabsProps {
@@ -37,13 +39,8 @@ export async function enhanceAppWithComponentView(app: EnhanceAppContext["app"],
     );
   }
 
-  const { render, disableRender } = resolvedConfig;
+  const { disableRender } = resolvedConfig;
   if (disableRender) {
     return;
-  }
-
-  if (render === "GroupTabs") {
-    const importer = await import("./GroupTabs.vue");
-    app.component("GroupTabs", importer.default);
   }
 }

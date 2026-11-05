@@ -110,12 +110,12 @@ function plugin(md: MarkdownRenderer) {
         }
 
         const { render = "", disableRender } = markupParams;
-        return (
-          `<ComponentView render="${render}" :disableRender="${disableRender}">\n` +
-          `<${name} />\n` +
-          `<template #highlight>${options.highlight(content, "vue", "")}</template>\n` +
-          `</ComponentView>\n`
-        );
+        return [
+          `<ComponentView name=${name} render="${render}" :disableRender="${disableRender}">`,
+          `<${name} />`,
+          `<template #highlight>${options.highlight(content, "vue", "")}</template>`,
+          `</ComponentView>`,
+        ].join("\n");
       } else {
         return ``;
       }
