@@ -29,6 +29,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [sfcVitePlugin()],
+    ssr: {
+      noExternal: ["vitepress-plugin-sfc"],
+    },
   },
 });
 ```

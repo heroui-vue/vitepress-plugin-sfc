@@ -30,6 +30,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [sfcVitePlugin()],
+    ssr: {
+      noExternal: ["vitepress-plugin-sfc"],
+    },
   },
 });
 ```
@@ -46,6 +49,12 @@ export default {
   },
 };
 ```
+
+::: details Why is `noExternal: ["vitepress-plugin-sfc"]` required?
+Some built-in components in `vitepress-plugin-sfc` rely on [Runtime APIs](https://vitepress.dev/zh/reference/runtime-api#runtime-api) to access specific data (such as `lang`). When running `vitepress build`, `vitepress-plugin-sfc` must be included in the VitePress SSR build process, rather than being treated as a standard Node.js dependency. For more context, see:
+
+- [VitePress Issue #2987](https://github.com/vuejs/vitepress/issues/2987)
+- [Nólëbase Integrations Issue](https://nolebase-integrations.ayaka.io/pages/zh-CN/integrations/vitepress-plugin-enhanced-readabilities)
 :::
 
 ## Usage

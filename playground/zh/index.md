@@ -30,6 +30,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [sfcVitePlugin()],
+    ssr: {
+      noExternal: ["vitepress-plugin-sfc"],
+    },
   },
 });
 ```
@@ -45,6 +48,13 @@ export default {
   },
 };
 ```
+
+::: details 为什么需要`noExternal: ["vitepress-plugin-sfc"]`?
+`vitepress-plugin-sfc` 部分内置组件依赖 [运行时API](https://vitepress.dev/zh/reference/runtime-api#runtime-api) 读取某些数据(比如 `lang` )，在运行 `vitepress build` 时，`vitepress-plugin-sfc` 需要进入到vitrepss的SSR构建流程，而不是被当成一个普通的nodejs依赖。更多上下文：
+
+- [VitePress Issue #2987](https://github.com/vuejs/vitepress/issues/2987)
+- [Nólëbase Integrations Issue
+  ](https://nolebase-integrations.ayaka.io/pages/zh-CN/integrations/vitepress-plugin-enhanced-readabilities)
 :::
 
 ## 使用
