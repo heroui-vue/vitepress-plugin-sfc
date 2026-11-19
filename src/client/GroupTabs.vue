@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, useId, onMounted } from "vue";
+import { computed, ref, useId, inject } from "vue";
 import { useData } from "vitepress";
-import { type GroupTabsProps } from "./index";
+import { contextConfigSymbol } from "./index";
+import type { GroupTabsProps, Config } from "./index";
 
 const DEFAULT_LOCALE: GroupTabsProps["locale"] = {
   en: {
@@ -18,6 +19,7 @@ const DEFAULT_LOCALE: GroupTabsProps["locale"] = {
   },
 };
 
+const contextConfig = inject<Config>(contextConfigSymbol);
 const props = defineProps<GroupTabsProps>();
 
 const { lang } = useData();
@@ -45,7 +47,7 @@ const tabGroupId = useId();
       </template>
     </header>
 
-    <main v-show="activedTab === 'preview'">
+    <main v-show="activedTab === 'preview'" :class="{ 'vp-raw': contextConfig.isolateStyles }">
       <slot />
     </main>
 

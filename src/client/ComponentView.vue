@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { inject, computed, createCommentVNode, type Component } from "vue";
-import { configSymbol, type Config, type ComponentViewProps } from "./index";
+import { inject, provide, computed, createCommentVNode, type Component } from "vue";
+import { globalConfigSymbol, contextConfigSymbol } from "./index";
+import defu from "defu";
+import type { Config, ComponentViewProps } from "./index";
 import GroupTabs from "./GroupTabs.vue";
 
 interface Props extends ComponentViewProps {
@@ -8,31 +10,28 @@ interface Props extends ComponentViewProps {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  render: "GroupTabs",
   disableRender: false,
 });
 
-const injectedConfig = inject<Config>(configSymbol);
+const globalConfig = inject<Config>(globalConfigSymbol);
 
 const VitePressPluginSFCComment = computed(() =>
   createCommentVNode(`[vitepress-plugin-sfc] @name ${props.name}`),
 );
 
 const config = computed<Props>(() => {
-  const { render, disableRender, nativeIfNotRender } = injectedConfig;
-  const resolveConfig = {
-    render: render || props.render,
-    disableRender:
-      disableRender === null || disableRender === undefined ? props.disableRender : disableRender,
-  };
+  const resolveConfig = defu(props, globalConfig);
 
+  const { render, nativeIfNotRender } = resolveConfig;
   let renderInstance: Component | boolean | undefined;
-  if (resolveConfig.render === "GroupTabs") {
+  if (render === "GroupTabs") {
     renderInstance = GroupTabs;
-  } else if (nativeIfNotRender && !resolveConfig.render) {
+  } else if (nativeIfNotRender && !render) {
     renderInstance = true;
-  } else if (!resolveConfig.render) {
+  } else if (!render) {
     console.error(
-      `[vitepress-plugin-sfc] Unregistered component: ${resolveConfig.render}.
+      `[vitepress-plugin-sfc] Unregistered component: ${render}.
       You can render content as-is by enabling the "nativeIfNotRender" parameter.`,
     );
   }
@@ -41,6 +40,8 @@ const config = computed<Props>(() => {
     render: renderInstance,
   };
 });
+
+provide(contextConfigSymbol, config);
 </script>
 
 <template>

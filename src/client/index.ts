@@ -6,6 +6,7 @@ export interface ComponentViewProps {
   render?: "GroupTabs" | "SourceCodeButton" | (string & {}) | Component | boolean;
   disableRender?: boolean;
   nativeIfNotRender?: boolean;
+  isolateStyles?: boolean;
 }
 
 export interface GroupTabsProps {
@@ -20,27 +21,31 @@ export type Config = ComponentViewProps & {
   groupTabs?: GroupTabsProps;
 };
 
-export const configSymbol = Symbol("__vitepress_plugin_sfc_config");
+export const globalConfigSymbol = Symbol("__vitepress_plugin_sfc_config");
+export const contextConfigSymbol = Symbol();
 
-const DEFUALT_CONFIG: Config = {
-  render: "GroupTabs",
-};
+export function mergeProps<T extends Record<string, any> = Record<string, any>>(
+  ...args: (T | null | undefined)[]
+): T {
+  const result = {} as T;
+
+  for (const props of args) {
+    if (props) {
+      Object.assign(result, props);
+    }
+  }
+
+  return result;
+}
 
 export async function enhanceAppWithComponentView(app: EnhanceAppContext["app"], config?: Config) {
   app.component("ComponentView", ComponentView);
 
-  const resolvedConfig = { ...DEFUALT_CONFIG, ...config };
-
   if (app) {
-    app.provide(configSymbol, resolvedConfig);
+    app.provide(globalConfigSymbol, config);
   } else {
     throw new Error(
       "[vitepress-plugin-sfc] The `useConfig` must be called within a Vue component if not providing an app",
     );
-  }
-
-  const { disableRender } = resolvedConfig;
-  if (disableRender) {
-    return;
   }
 }

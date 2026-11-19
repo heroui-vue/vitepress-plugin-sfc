@@ -64,6 +64,17 @@ function parseMarkupParams(params: string): ComponentViewProps {
   }
 
   const arr = params.split(",");
+  const toBooleanish = (key: string, value: string) => {
+    return [key, value !== "false"];
+  };
+  type PickBooleanish<T extends object> = {
+    [P in keyof T as T[P] extends boolean ? P : never]: T[P];
+  };
+  const booleanishParams: Array<keyof PickBooleanish<ComponentViewProps>> = [
+    "disableRender",
+    "isolateStyles",
+    "isolateStyles",
+  ];
   return Object.fromEntries(
     arr
       .map((item) => {
@@ -72,8 +83,8 @@ function parseMarkupParams(params: string): ComponentViewProps {
           keyof ComponentViewProps,
           string,
         ];
-        if (key === "disableRender") {
-          return ["disableRender", !value || value === "true" ? "true" : "false"];
+        if (booleanishParams.includes(key as any)) {
+          return toBooleanish(key, value);
         }
         return key && value ? [key, value] : undefined;
       })
@@ -109,9 +120,17 @@ function plugin(md: MarkdownRenderer) {
           __matched_sfc_set__.add(hash);
         }
 
-        const { render = "", disableRender } = markupParams;
+        const props = Object.keys(markupParams)
+          .map((key) => {
+            if (typeof markupParams[key] === "boolean" && markupParams[key]) {
+              return key;
+            } else {
+              return `${key}=${markupParams[key]}`;
+            }
+          })
+          .join(" ");
         return [
-          `<ComponentView name=${name} render="${render}" :disableRender="${disableRender}">`,
+          `<ComponentView ${props} name=${name}>`,
           `<${name} />`,
           `<template #highlight>${options.highlight(content, "vue", "")}</template>`,
           `</ComponentView>`,
