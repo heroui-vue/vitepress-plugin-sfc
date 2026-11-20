@@ -12,6 +12,8 @@ interface Props extends ComponentViewProps {
 const props = withDefaults(defineProps<Props>(), {
   render: "GroupTabs",
   disableRender: false,
+  nativeIfNotRender: undefined,
+  isolateStyles: undefined,
 });
 
 const globalConfig = inject<Config>(globalConfigSymbol);
@@ -22,7 +24,6 @@ const VitePressPluginSFCComment = computed(() =>
 
 const config = computed<Props>(() => {
   const resolveConfig = defu(props, globalConfig);
-
   const { render, nativeIfNotRender } = resolveConfig;
   let renderInstance: Component | boolean | undefined;
   if (render === "GroupTabs") {

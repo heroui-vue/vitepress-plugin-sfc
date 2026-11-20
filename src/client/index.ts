@@ -24,25 +24,10 @@ export type Config = ComponentViewProps & {
 export const globalConfigSymbol = Symbol("__vitepress_plugin_sfc_config");
 export const contextConfigSymbol = Symbol();
 
-export function mergeProps<T extends Record<string, any> = Record<string, any>>(
-  ...args: (T | null | undefined)[]
-): T {
-  const result = {} as T;
-
-  for (const props of args) {
-    if (props) {
-      Object.assign(result, props);
-    }
-  }
-
-  return result;
-}
-
 export async function enhanceAppWithComponentView(app: EnhanceAppContext["app"], config?: Config) {
-  app.component("ComponentView", ComponentView);
-
   if (app) {
     app.provide(globalConfigSymbol, config);
+    app.component("ComponentView", ComponentView);
   } else {
     throw new Error(
       "[vitepress-plugin-sfc] The `useConfig` must be called within a Vue component if not providing an app",
