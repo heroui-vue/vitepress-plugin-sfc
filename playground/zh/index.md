@@ -89,15 +89,13 @@ const msg = ref("");
 
 ## 功能
 
+可通过块标记参数配置和全局配置来启用或者禁用功能，块标记参数之间通过`,`分割。所有支持的块标记参数同样可以在全局配置中使用，当同时使用两者时，块标记参数配置具有更高的优先级。
+
 ### 禁用默认渲染
 
-`vitepress-plugin-sfc`默认会使用一个类似于[Vitepress 代码组](https://vitepress.dev/zh/guide/markdown#code-groups)的组件来渲染Vue SFC，它由**预览**和**源码**（可配置）两个**可切换**的tab组成。
+`vitepress-plugin-sfc`默认会使用一个类似于[Vitepress 代码组](https://vitepress.dev/zh/guide/markdown#code-groups)的内置[GroubTab组件](#)来渲染Vue SFC，它由**预览**和**源码**两个可切换的tab组成。
 
-要禁用此行为，可通过块标记参数或者全局配置实现
-
-#### 通过块标记参数
-
-添加参数`disableRender`到`:::sfc`，就像这样
+要禁用此行为，可通过块标记参数 `disableRender`
 
 ```markdown
 :::sfc disableRender
@@ -112,6 +110,10 @@ const msg = ref("");
 :::
 ```
 
+::: tip
+块标记参数会像Vue Props一样被解析，这意味着`boolean`类型的参数可以裸声明。
+:::
+
 组件将按原样渲染：
 
 :::sfc disableRender
@@ -125,26 +127,82 @@ const msg = ref("");
 </template>
 :::
 
-::: tip
-`disableRender=true`也会生效，除此以外，其它形式会被认为无效。
+### 样式隔离
+
+内联的SFC会受到Vitepress的默认样式影响，即使是通过外部导入的组件也是如此。`vitepress-plugin-sfc`提供`isolateStyles`参数来避免这种情况。
+
+```markdown
+:::sfc isolateStyles
+<template>
+  <input placeholder="请输入" />
+</template>
 :::
+```
 
-#### 通过全局配置
+在内部，`isolateStyles`会添加一个`vp-raw` html class属性，`vitepress`会通过它来实现样式隔离，在此之前，你还需要安装`postcss`
 
-在`.vitepress/theme/index.ts`中配置：
+```shell-vue
+npm add -D postcss
+```
 
-::: code-group
-```ts [.vitepress/theme/index.ts]
-import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
+然后配置`postcss.config.mjs`
+
+```js
+import { postcssIsolateStyles } from "vitepress";
 
 export default {
-  extends: DefaultTheme,
-  enhanceApp({ app }) {
-    enhanceAppWithComponentView(app, {
-      disableRender: true,
-    });
-  },
+  plugins: [
+    postcssIsolateStyles({
+      includeFiles: [/vp-doc\.css/, /base\.css/],
+    }),
+  ],
 };
 ```
+
+渲染后效果：
+
+:::sfc isolateStyles
+<template>
+  <input placeholder="请输入" />
+</template>
+:::
+
+如果同时声明了`disableRender`，`isolateStyles`将不会生效
+
+```markdown
+:::sfc disableRender,isolateStyles
+<template>
+  <input placeholder="请输入" />
+</template>
+:::
+```
+
+渲染效果：
+
+:::sfc isolateStyles,disableRender
+<template>
+  <input placeholder="请输入" />
+</template>
+:::
+
+要实现样式隔离，你需要手动添加`vp-raw` html class属性
+
+```markdown
+:::sfc disableRender,isolateStyles
+<template>
+  <input class="vp-raw" placeholder="请输入" />
+</template>
+:::
+```
+
+添加后渲染效果：
+
+:::sfc isolateStyles,disableRender
+<template>
+  <input class="vp-raw" placeholder="请输入" />
+</template>
+:::
+
+::: tip
+注意，你仍然需要安装并配置`postcss`
 :::
