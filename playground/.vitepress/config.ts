@@ -16,6 +16,9 @@ export default defineConfig({
         link: "https://npmx.dev/package/vitepress-plugin-sfc",
       },
     ],
+    outline: {
+      level: [2, 3],
+    },
   },
   locales: {
     root: {
@@ -26,11 +29,6 @@ export default defineConfig({
       label: "简体中文",
       lang: "zh",
       link: "/zh/",
-    },
-    fr: {
-      label: "Français",
-      lang: "fr",
-      link: "/fr/",
     },
   },
   markdown: {
