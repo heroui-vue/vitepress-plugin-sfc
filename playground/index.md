@@ -40,18 +40,17 @@ export default defineConfig({
 ```ts [.vitepress/theme/index.ts]
 import DefaultTheme from "vitepress/theme";
 import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
-import "vitepress-plugin-sfc/style";
 
 export default {
   extends: DefaultTheme,
-  async enhanceApp({ app }) {
-    await enhanceAppWithComponentView(app);
+  enhanceApp({ app }) {
+    enhanceAppWithComponentView(app);
   },
 };
 ```
 
 ::: details Why is `noExternal: ["vitepress-plugin-sfc"]` required?
-Some built-in components in `vitepress-plugin-sfc` rely on [Runtime APIs](https://vitepress.dev/zh/reference/runtime-api#runtime-api) to access specific data (such as `lang`). When running `vitepress build`, `vitepress-plugin-sfc` must be included in the VitePress SSR build process, rather than being treated as a standard Node.js dependency. For more context, see:
+Some built-in components in `vitepress-plugin-sfc` rely on [Runtime APIs](https://vitepress.dev/reference/runtime-api#runtime-api) to access specific data (such as `lang`). When running `vitepress build`, `vitepress-plugin-sfc` must be included in the VitePress SSR build process, rather than being treated as a standard Node.js dependency. For more context, see:
 
 - [VitePress Issue #2987](https://github.com/vuejs/vitepress/issues/2987)
 - [Nólëbase Integrations Issue](https://nolebase-integrations.ayaka.io/pages/zh-CN/integrations/vitepress-plugin-enhanced-readabilities)
@@ -69,7 +68,7 @@ const msg = ref("");
 </script>
 
 <template>
-<input v-model="msg" placeholder="Please enter text" />
+    <input v-model="msg" placeholder="Please enter text" />
 </template>
 :::
 ```
@@ -83,21 +82,19 @@ const msg = ref("");
 </script>
 
 <template>
-<input v-model="msg" placeholder="Please enter text" />
+    <input v-model="msg" placeholder="Please enter text" />
 </template>
 :::
 
 ## Features
 
+Features can be enabled or disabled through block parameters or global configuration. Separate block parameters with commas (`,`). All supported block parameters can also be used in the global configuration. When both are set, block parameters take precedence.
+
 ### Disabling Default Rendering
 
-By default, `vitepress-plugin-sfc` uses a component—similar to [VitePress Code Groups](https://vitepress.dev/guide/markdown#code-groups)—to render Vue components. The SFC component consists of two switchable tabs: **Preview** and **Source Code** (which can be configured).
+By default, `vitepress-plugin-sfc` uses the built-in [GroubTab component](#), similar to [VitePress Code Groups](https://vitepress.dev/guide/markdown#code-groups), to render Vue SFCs. It consists of two switchable tabs: **Preview** and **Source Code**.
 
-You can disable this behavior either via a block-level parameter or through global configuration.
-
-#### Via a block-level parameter
-
-Add the `disableRender` parameter to the `:::sfc` block, like this:
+To disable this behavior, add the `disableRender` block parameter:
 
 ```markdown
 :::sfc disableRender
@@ -107,10 +104,14 @@ const msg = ref("");
 </script>
 
 <template>
-<input v-model="msg" placeholder="Please enter text" />
+    <input v-model="msg" placeholder="Please enter text" />
 </template>
 :::
 ```
+
+::: tip
+Block parameters are parsed like Vue props, which means `boolean` parameters can be declared without a value.
+:::
 
 The component will be rendered as is:
 
@@ -121,30 +122,86 @@ const msg = ref("");
 </script>
 
 <template>
-<input v-model="msg" placeholder="Please enter text" />
+    <input v-model="msg" placeholder="Please enter text" />
+</template>
+:::
+
+### Style Isolation
+
+Inline SFCs are affected by VitePress's default styles, as are externally imported components. `vitepress-plugin-sfc` provides the `isolateStyles` parameter to prevent this.
+
+```markdown
+:::sfc isolateStyles
+<template>
+  <input placeholder="Please enter text" />
+</template>
+:::
+```
+
+Internally, `isolateStyles` adds the `vp-raw` HTML class, which VitePress uses to isolate styles. First, install `postcss`:
+
+```shell-vue
+npm add -D postcss
+```
+
+Then configure `postcss.config.mjs`:
+
+```js
+import { postcssIsolateStyles } from "vitepress";
+
+export default {
+  plugins: [
+    postcssIsolateStyles({
+      includeFiles: [/vp-doc\.css/, /base\.css/],
+    }),
+  ],
+};
+```
+
+The rendered result:
+
+:::sfc isolateStyles
+<template>
+  <input placeholder="Please enter text" />
+</template>
+:::
+
+If `disableRender` is also set, `isolateStyles` has no effect:
+
+```markdown
+:::sfc disableRender,isolateStyles
+<template>
+  <input placeholder="Please enter text" />
+</template>
+:::
+```
+
+The rendered result:
+
+:::sfc isolateStyles,disableRender
+<template>
+  <input placeholder="Please enter text" />
+</template>
+:::
+
+To isolate styles, add the `vp-raw` HTML class manually:
+
+```markdown
+:::sfc disableRender,isolateStyles
+<template>
+  <input class="vp-raw" placeholder="Please enter text" />
+</template>
+:::
+```
+
+The rendered result after adding the class:
+
+:::sfc isolateStyles,disableRender
+<template>
+  <input class="vp-raw" placeholder="Please enter text" />
 </template>
 :::
 
 ::: tip
-Setting `disableRender=true` also works; any other format will be considered invalid.
-:::
-
-#### Via global configuration
-
-Configure it in `.vitepress/theme/index.ts`:
-
-::: code-group
-```ts [.vitepress/theme/index.ts]
-import DefaultTheme from "vitepress/theme";
-import { enhanceAppWithComponentView } from "vitepress-plugin-sfc/client";
-
-export default {
-  extends: DefaultTheme,
-  enhanceApp({ app }) {
-    enhanceAppWithComponentView(app, {
-      disableRender: true,
-    });
-  },
-};
-```
+You still need to install and configure `postcss`.
 :::
