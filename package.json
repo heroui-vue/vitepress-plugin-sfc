@@ -1,6 +1,6 @@
 {
   "name": "vitepress-plugin-sfc",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Allows you to write Vue SFC within Markdown files and render them in VitePress.",
   "keywords": [
     "component",
